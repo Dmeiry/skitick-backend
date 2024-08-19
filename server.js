@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import requestLogger from "./middleware/requestLogger.js";
 import errorHandler from "./middleware/errorHandler.js";
-
+import connectDB from "./config/db.js"
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -19,6 +19,11 @@ app.get("/", (req, res) => {
 app.use(errorHandler);
 
 // server listener
+
+
+
+// connectDB().then(() => {
 app.listen(PORT, () => {
   console.log(`Skitick app listening on port ${PORT}`);
 });
+// });
