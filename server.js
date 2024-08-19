@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import requestLogger from "./middleware/requestLogger.js";
 import errorHandler from "./middleware/errorHandler.js";
+import userRoutes from "./routes/userRoutes.js"
 import connectDB from "./config/db.js"
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,6 +15,8 @@ app.use(requestLogger);
 app.get("/", (req, res) => {
   res.send("hello");
 });
+
+app.use("/api/users", userRoutes);
 
 // error handler
 app.use(errorHandler);
