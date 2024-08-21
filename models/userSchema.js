@@ -3,46 +3,70 @@ import { Schema, model } from "mongoose";
 const userSchema = new Schema(
     {
 
-        firstname: {
-            type: String,
-            required: [true, "firstname is required"],
-            unique: false,
+        modifiedDate: {
+            type: Date,
+            required: true,
         },
-        lastname: {
-            type: String,
-            required: [true, "lastname is required"],
-            unique: false,
+        createDate: {
+            type: Date,
+            required: true,
         },
-        imageUrl: {
+        email: {
             type: String,
-
-        },
-        password: {
-            type: String,
-            required: [true, "Password is required"],
-        },
-        currentBoard: {
-            type: String,
-        },
-        class: {
-            type: String,
+            required: true,
+            unique: true,
         },
         phone: {
             type: String,
             validate: {
                 validator: function (value) {
-                    // Regular expression to validate phone address
-                    const phoneRegex = /^\+?[1-9]\d{1,11}$/;
+                    // Regular expression to validate phone number
+                    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
                     return phoneRegex.test(value);
                 },
                 message: "Invalid phone number",
             },
-
-        }
+        },
+        auth: {
+            type: Boolean,
+            required: true,
+        },
+        class: {
+            type: String,
+        },
+        currentBoard: {
+            type: String,
+        },
+        firstname: {
+            type: String,
+            required: true,
+        },
+        imageUrl: {
+            type: String,
+        },
+        lastname: {
+            type: String,
+            required: true,
+        },
+        myBoards: {
+            type: [String],
+            default: [],
+        },
+        myStickers: {
+            type: [String],
+            default: [],
+        },
+        score: {
+            type: Number,
+        },
+        status: {
+            type: String,
+            default: 1,
+        },
     },
     { timestamps: true }
 );
 
-const User = model("user", userSchema);
+const User = model("user", userSchema, "users");
 
 export default User;
