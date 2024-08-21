@@ -1,10 +1,12 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv/config";
+
 import requestLogger from "./middleware/requestLogger.js";
 import errorHandler from "./middleware/errorHandler.js";
-import userRoutes from "./routes/userRoutes.js"
-import connectDB from "./config/db.js"
-import dotenv from "dotenv/config";
+import userRoutes from "./routes/userRoutes.js";
+import boardRoutes from "./routes/boardRoutes.js";
+import connectDB from "./config/db.js";
 
 // constants
 const PORT = process.env.PORT || 3000;
@@ -26,6 +28,7 @@ app.get("/", (req, res) => {
 
 // routes
 app.use("/api/users", userRoutes);
+app.use("/api/boards", boardRoutes);
 
 // error handling middlware
 app.use(errorHandler);
