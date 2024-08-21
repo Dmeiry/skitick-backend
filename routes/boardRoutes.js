@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { getAll, insert } from "../controllers/boardController.js";
+import { getAll, insert, update, getById, deleteById } from "../controllers/boardController.js";
 // EXPRESS' router
 const router = Router();
 
-// get all boards
 router.get('/getAll', getAll)
-
-// insert new record to database
+router.get('/get-by-id/:id', getById)
 router.post('/insert', insert)
+router.put('/update/:id', update)
+router.delete('/delete-by-id/:id', deleteById)
 
 
 export default router
