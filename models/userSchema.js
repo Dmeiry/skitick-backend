@@ -3,19 +3,6 @@ import { Schema, model } from "mongoose";
 const userSchema = new Schema(
     {
 
-        modifiedDate: {
-            type: Date,
-            required: true,
-        },
-        createDate: {
-            type: Date,
-            required: true,
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-        },
         phone: {
             type: String,
             validate: {
