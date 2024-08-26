@@ -100,21 +100,23 @@ export const update = async (req, res) => {
  * @returns {json} document data
  */
 export const deleteById = async (req, res) => {
-    try {
-        // get id from request
-        const { id } = req.params;
 
-        // delete document
-        const result = await Sticker.findByIdAndDelete(id);
-
-        // document not found. return not found response error
-        if (!result) {
-            return res.status(STATUS_CODE.NOT_FOUND).send('Document not found');
+        try {
+    
+             // get document id and set status to 2 [0:active, 1:inactive , 2:deleted] from request
+             const { id } = req.params;
+             const setstatus = { status: "2" };
+     
+             const updatedRecord = await Sticker.findByIdAndUpdate(id,setstatus)
+     
+             // document not found. return not found response error
+             if (!updatedRecord) {
+                 return res.status(STATUS_CODE.NOT_FOUND).send('Record not found');
+             }
+             
+             res.send(updatedRecord);
+        } catch (error) {
+            console.error(error);
+            res.status(STATUS_CODE.BAD_REQUEST).json(error);
         }
-        
-        res.send(result);
-    } catch (error) {
-        console.error(error);
-        res.status(STATUS_CODE.BAD_REQUEST).json(error);
     }
-}
