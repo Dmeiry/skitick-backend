@@ -16,7 +16,7 @@ const baseQuestionSchema = new Schema(
       ],
     },
   },
-  { discriminatorKey: "type", _id: false }
+  { discriminatorKey: "type" }
 );
 
 // Specific question schemas
@@ -34,8 +34,7 @@ const multipleChoiceSingleSchema = new Schema(
       type: String,
       required: true,
     },
-  },
-  { _id: false }
+  }
 );
 
 const multipleChoiceMultipleSchema = new Schema(
@@ -52,8 +51,7 @@ const multipleChoiceMultipleSchema = new Schema(
       type: [String],
       required: true,
     },
-  },
-  { _id: false }
+  }
 );
 
 const matchingQuestionSchema = new Schema(
@@ -70,8 +68,7 @@ const matchingQuestionSchema = new Schema(
         },
       },
     ],
-  },
-  { _id: false }
+  }
 );
 
 const fillInTheBlankQuestionSchema = new Schema(
@@ -95,8 +92,7 @@ const fillInTheBlankQuestionSchema = new Schema(
     randomWords: {
       type: [String],
     },
-  },
-  { _id: false }
+  }
 );
 
 const trueFalseQuestionSchema = new Schema(
@@ -109,8 +105,7 @@ const trueFalseQuestionSchema = new Schema(
       type: Boolean,
       required: true,
     },
-  },
-  { _id: false }
+  }
 );
 
 const arrangeWordsQuestionSchema = new Schema(
@@ -119,8 +114,7 @@ const arrangeWordsQuestionSchema = new Schema(
       type: [String],
       required: true,
     },
-  },
-  { _id: false }
+  }
 );
 
 export {
