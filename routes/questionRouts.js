@@ -11,9 +11,9 @@ const router = express.Router();
 router.post("/", createQuestion);
 
 // Update a question by ID
-router.put("/:id", updateQuestion);
+router.put("/", updateQuestion);
 
 // Delete a question by ID
-router.delete("/:id", deleteQuestion);
+router.delete("/", deleteQuestion);
 
 export default router;
