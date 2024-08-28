@@ -10,6 +10,9 @@ const STATUS_CODES = {
   CONFLICT: 409,
   UNPROCESSABLE: 422,
   INTERNAL_SERVER_ERROR: 500,
+  ACTIVE: 1, // 1 for active
+  INACTIVE: 0, // 0 for unactive
+  DELETED: 5, // 5 for deleted
 };
 
 export default STATUS_CODES;
