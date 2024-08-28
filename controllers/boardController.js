@@ -101,18 +101,22 @@ export const update = async (req, res) => {
  */
 export const deleteById = async (req, res) => {
     try {
-        // get id from request
-        const { id } = req.params;
+      // get id from request
+      const { id } = req.params;
 
-        // delete document
-        const result = await Board.findByIdAndDelete(id);
+      // update the document's status to 2 (delete)
+      const result = await Board.findByIdAndUpdate(
+        id,
+        { status: 2 }, // Set status to 2 for soft delete
+        { new: true } // Return the updated document
+      );
 
-        // document not found. return not found response error
-        if (!result) {
-            return res.status(STATUS_CODE.NOT_FOUND).send('Document not found');
-        }
-        
-        res.send(result);
+      // document not found. return not found response error
+      if (!result) {
+        return res.status(STATUS_CODE.NOT_FOUND).send("Document not found");
+      }
+
+      res.send(result);
     } catch (error) {
         console.error(error);
         res.status(STATUS_CODE.BAD_REQUEST).json(error);

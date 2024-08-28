@@ -1,4 +1,13 @@
-import { Schema, SchemaTypes, model } from "mongoose";
+import { Schema, model } from "mongoose";
+import {
+  baseQuestionSchema,
+  multipleChoiceSingleSchema,
+  multipleChoiceMultipleSchema,
+  matchingQuestionSchema,
+  fillInTheBlankQuestionSchema,
+  trueFalseQuestionSchema,
+  arrangeWordsQuestionSchema,
+} from "./questionSchema.js";
 
 const boardSchema = new Schema(
   {
@@ -11,7 +20,7 @@ const boardSchema = new Schema(
       required: true,
     },
     questions: {
-      type: [SchemaTypes.Mixed],
+      type: [baseQuestionSchema],
       required: true,
     },
     level: {
@@ -31,8 +40,10 @@ const boardSchema = new Schema(
       required: true,
     },
     status: {
-      type: String,
+      type: Number,
       required: true,
+      enum: [0, 1, 2], // 0: active, 1: unactive, 2: delete
+      default: 0, // Default status can be set if needed
     },
     backgroundImageUrl: {
       type: String,
@@ -57,7 +68,22 @@ const boardSchema = new Schema(
   },
   { timestamps: true }
 );
-
+boardSchema
+  .path("questions")
+  .discriminator("multipleChoiceSingle", multipleChoiceSingleSchema);
+boardSchema
+  .path("questions")
+  .discriminator("multipleChoiceMultiple", multipleChoiceMultipleSchema);
+boardSchema.path("questions").discriminator("matching", matchingQuestionSchema);
+boardSchema
+  .path("questions")
+  .discriminator("fillInTheBlank", fillInTheBlankQuestionSchema);
+boardSchema
+  .path("questions")
+  .discriminator("trueFalse", trueFalseQuestionSchema);
+boardSchema
+  .path("questions")
+  .discriminator("arrangeWords", arrangeWordsQuestionSchema);
 const Board = model("board", boardSchema, "board");
 
 export default Board;
