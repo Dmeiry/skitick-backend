@@ -107,7 +107,7 @@ export const deleteById = async (req, res) => {
       // update the document's status to 2 (delete)
       const result = await Board.findByIdAndUpdate(
         id,
-        { status: 2 }, // Set status to 2 for soft delete
+        { status: STATUS_CODE.DELETED }, // Set status to 2 for soft delete
         { new: true } // Return the updated document
       );
 
@@ -122,3 +122,6 @@ export const deleteById = async (req, res) => {
         res.status(STATUS_CODE.BAD_REQUEST).json(error);
     }
 }
+
+
+
