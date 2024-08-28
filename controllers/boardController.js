@@ -73,24 +73,27 @@ export const insert = async (req, res, next) => {
  * @return {json} old document data | Error
  */
 export const update = async (req, res) => {
-    try {
-        // get document id and new data from request
-        const { id } = req.params;
-        const data = req.body;
+  try {
+    const { id } = req.params;
+    const data = req.body;
 
-        const updatedRecord = await Board.findByIdAndUpdate(id, data);
+    // Use $set to update only specified fields
+    const updatedRecord = await Board.findByIdAndUpdate(
+      id,
+      { $set: data },
+      { new: true } 
+    );
 
-        // document not found. return not found response error
-        if (!updatedRecord) {
-            return res.status(STATUS_CODE.NOT_FOUND).send('Record not found');
-        }
-        
-        res.send(updatedRecord);
-    } catch (error) {
-        console.error(error);
-        res.status(STATUS_CODE.BAD_REQUEST).json(error);
+    if (!updatedRecord) {
+      return res.status(STATUS_CODE.NOT_FOUND).send("Record not found");
     }
-}
+
+    res.send(updatedRecord);
+  } catch (error) {
+    console.error(error);
+    res.status(STATUS_CODE.BAD_REQUEST).json(error);
+  }
+};
 
 /**
  * Delete document using id
@@ -124,4 +127,98 @@ export const deleteById = async (req, res) => {
 }
 
 
+
+/**
+ * Undelete a soft-deleted document by setting its status to active
+ * 
+ * @param {*} req 
+ * @param {*} res
+ * @returns {json} document data
+ */
+export const undeleteById = async (req, res) => {
+    try {
+        // get id from request
+        const { id } = req.params;
+
+        const result = await Board.findByIdAndUpdate(
+            id,
+            { status: STATUS_CODE.ACTIVE }, 
+            { new: true } // Return the updated document
+        );
+
+        // document not found. return not found response error
+        if (!result) {
+            return res.status(STATUS_CODE.NOT_FOUND).send("Document not found");
+        }
+
+        res.send(result);
+    } catch (error) {
+        console.error(error);
+        res.status(STATUS_CODE.BAD_REQUEST).json(error);
+    }
+}
+
+
+
+/**
+ * Set a document's status to active (1)
+ * 
+ * @param {*} req 
+ * @param {*} res
+ * @returns {json} document data
+ */
+export const setActive = async (req, res) => {
+    try {
+        // get id from request
+        const { id } = req.params;
+
+        // update the document's status to 1 (active)
+        const result = await Board.findByIdAndUpdate(
+            id,
+            { status: STATUS_CODE.ACTIVE }, // Set status to 1 for active
+            { new: true } // Return the updated document
+        );
+
+        // document not found. return not found response error
+        if (!result) {
+            return res.status(STATUS_CODE.NOT_FOUND).send("Document not found");
+        }
+
+        res.send(result);
+    } catch (error) {
+        console.error(error);
+        res.status(STATUS_CODE.BAD_REQUEST).json(error);
+    }
+}
+
+/**
+ * Set a document's status to inactive (0)
+ * 
+ * @param {*} req 
+ * @param {*} res
+ * @returns {json} document data
+ */
+export const setInactive = async (req, res) => {
+    try {
+        // get id from request
+        const { id } = req.params;
+
+        // update the document's status to 0 (inactive)
+        const result = await Board.findByIdAndUpdate(
+            id,
+            { status: STATUS_CODE.INACTIVE }, // Set status to 0 for inactive
+            { new: true } // Return the updated document
+        );
+
+        // document not found. return not found response error
+        if (!result) {
+            return res.status(STATUS_CODE.NOT_FOUND).send("Document not found");
+        }
+
+        res.send(result);
+    } catch (error) {
+        console.error(error);
+        res.status(STATUS_CODE.BAD_REQUEST).json(error);
+    }
+}
 

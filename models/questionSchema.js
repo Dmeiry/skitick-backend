@@ -83,7 +83,7 @@ const fillInTheBlankQuestionSchema = new Schema(
     blanks: [
       {
         placeholder: {
-          type: String,
+          type: Number,
           required: true,
         },
         correctAnswer: {
