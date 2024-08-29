@@ -8,6 +8,7 @@ import userRoutes from "./routes/userRoutes.js";
 import stickersRoutes from "./routes/stickersRoutes.js";
 import boardRoutes from "./routes/boardRoutes.js";
 import questionRouts from "./routes/questionRouts.js";
+import userBoardRoute from "./routes/userBoardRoute.js";
 
 // constants
 const PORT = process.env.PORT || 3000;
@@ -32,6 +33,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/stickers", stickersRoutes);
 app.use("/api/boards", boardRoutes);
 app.use("/api/questions", questionRouts);
+app.use("/api/userboard", userBoardRoute);
+
 
 // error handling middlware
 app.use(errorHandler);
