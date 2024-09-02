@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { boardUserSchema } from "./boardUserSchema";
 
 const userSchema = new Schema(
   {
@@ -36,35 +37,7 @@ const userSchema = new Schema(
       required: true,
     },
     myBoards: {
-      type: [
-        {
-          board: {
-            type: Schema.Types.ObjectId,
-            ref: "board",
-          },
-          progress: {
-            type: Number,
-            default: 0,
-          },
-          answers: {
-            type: Map,
-            of: Schema.Types.Mixed, // Allows storing different types of answers
-            default: new Map(),
-            // You can add a validation function to enforce that keys are ObjectId strings
-            validate: {
-              validator: function (map) {
-                for (let key of map.keys()) {
-                  if (!Schema.Types.ObjectId.isValid(key)) {
-                    return false;
-                  }
-                }
-                return true;
-              },
-              message: "All keys in answers must be valid ObjectId strings",
-            },
-          },
-        },
-      ],
+      type: [boardUserSchema],
       default: [],
     },
     myStickers: {

@@ -10,7 +10,7 @@ import {
 } from "./questionSchema.js";
 import STATUS_CODES from "../constants/statusCodes.js";
 
-const boardSchema = new Schema(
+export const boardSchema = new Schema(
   {
     album: {
       type: String,
