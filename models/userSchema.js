@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
-import { boardUserSchema } from "./boardUserSchema";
-
+import boardSchema from "./boardUserSchema.js";
 const userSchema = new Schema(
   {
     phone: {
@@ -37,7 +36,7 @@ const userSchema = new Schema(
       required: true,
     },
     myBoards: {
-      type: [boardUserSchema],
+      type: [boardSchema],
       default: [],
     },
     myStickers: {
