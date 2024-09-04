@@ -3,7 +3,7 @@ import STATUS_CODE from "../constants/statusCodes.js";
 
 /**
  * @description Submit answers to a board
- * @route   POST /api/questions/submitAnswers
+ * @route   POST http://localhost:3000/api/userquestion/submitAnswers
  * @param {Object} req - Request object
  * @param {Object} res - Response object
  * @returns json containing updated user answers

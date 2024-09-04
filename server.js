@@ -10,6 +10,7 @@ import boardRoutes from "./routes/boardRoutes.js";
 import questionRouts from "./routes/questionRouts.js";
 import userBoardRoute from "./routes/userBoardRoute.js";
 import userQuestionRoute from "./routes/userQuestionRoute.js";
+import authRoutes from './routes/authRoutes.js'; 
 
 // constants
 const PORT = process.env.PORT || 3000;
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 });
 
 // routes
+app.use("/api/auth", authRoutes); 
 app.use("/api/users", userRoutes);
 app.use("/api/stickers", stickersRoutes);
 app.use("/api/boards", boardRoutes);
