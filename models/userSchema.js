@@ -4,14 +4,9 @@ const userSchema = new Schema(
   {
     phone: {
       type: String,
-      validate: {
-        validator: function (value) {
-          // Regular expression to validate phone number
-          const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-          return phoneRegex.test(value);
-        },
-        message: "Invalid phone number",
-      },
+    },
+    email: {
+      type: String,
     },
     auth: {
       type: Boolean,
@@ -26,14 +21,12 @@ const userSchema = new Schema(
     },
     firstname: {
       type: String,
-      required: true,
     },
     imageUrl: {
       type: String,
     },
     lastname: {
       type: String,
-      required: true,
     },
     myBoards: {
       type: [boardSchema],
