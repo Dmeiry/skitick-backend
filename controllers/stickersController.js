@@ -1,5 +1,6 @@
 import Sticker from "../models/stickersSchema.js";
 import STATUS_CODE from "../constants/statusCodes.js";
+import { RECORD_STATUS } from "../constants/statusCodes.js";
 
 /**
  * 
@@ -105,7 +106,7 @@ export const deleteById = async (req, res) => {
     
              // get document id and set status to 2 [1:active, 0:inactive , 5:deleted] from request
              const { id } = req.params;
-             const setstatus = { status: STATUS_CODE.DELETED };
+             const setstatus = { status: RECORD_STATUS.DELETED };
      
              const updatedRecord = await Sticker.findByIdAndUpdate(id,setstatus, { new: true })
      
@@ -140,7 +141,7 @@ export const undeleteById = async (req, res) => {
 
         const result = await Sticker.findByIdAndUpdate(
             id,
-            { status: STATUS_CODE.ACTIVE }, 
+            { status: RECORD_STATUS.ACTIVE }, 
             { new: true } // Return the updated document
         );
 
@@ -173,7 +174,7 @@ export const setActive = async (req, res) => {
         // update the document's status to 1 (active)
         const result = await Sticker.findByIdAndUpdate(
             id,
-            { status: STATUS_CODE.ACTIVE }, // Set status to 1 for active
+            { status: RECORD_STATUS.ACTIVE }, // Set status to 1 for active
             { new: true } // Return the updated document
         );
 
@@ -204,7 +205,7 @@ export const setInactive = async (req, res) => {
         // update the document's status to 0 (inactive)
         const result = await Sticker.findByIdAndUpdate(
             id,
-            { status: STATUS_CODE.INACTIVE }, // Set status to 0 for inactive
+            { status: RECORD_STATUS.INACTIVE }, // Set status to 0 for inactive
             { new: true } // Return the updated document
         );
 
