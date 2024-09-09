@@ -103,11 +103,11 @@ export const deleteById = async (req, res) => {
 
         try {
     
-             // get document id and set status to 2 [0:active, 1:inactive , 2:deleted] from request
+             // get document id and set status to 2 [1:active, 0:inactive , 5:deleted] from request
              const { id } = req.params;
-             const setstatus = { status: "2" };
+             const setstatus = { status: STATUS_CODE.DELETED };
      
-             const updatedRecord = await Sticker.findByIdAndUpdate(id,setstatus)
+             const updatedRecord = await Sticker.findByIdAndUpdate(id,setstatus, { new: true })
      
              // document not found. return not found response error
              if (!updatedRecord) {
@@ -120,3 +120,102 @@ export const deleteById = async (req, res) => {
             res.status(STATUS_CODE.BAD_REQUEST).json(error);
         }
     }
+
+// =====================================================================
+//========================================================
+//===============================================
+
+
+/**
+ * Undelete a soft-deleted document by setting its status to active
+ * 
+ * @param {*} req 
+ * @param {*} res
+ * @returns {json} document data
+ */
+export const undeleteById = async (req, res) => {
+    try {
+        // get id from request
+        const { id } = req.params;
+
+        const result = await Sticker.findByIdAndUpdate(
+            id,
+            { status: STATUS_CODE.ACTIVE }, 
+            { new: true } // Return the updated document
+        );
+
+        // document not found. return not found response error
+        if (!result) {
+            return res.status(STATUS_CODE.NOT_FOUND).send("Document not found");
+        }
+
+        res.send(result);
+    } catch (error) {
+        console.error(error);
+        res.status(STATUS_CODE.BAD_REQUEST).json(error);
+    }
+}
+
+
+
+/**
+ * Set a document's status to active (1)
+ * 
+ * @param {*} req 
+ * @param {*} res
+ * @returns {json} document data
+ */
+export const setActive = async (req, res) => {
+    try {
+        // get id from request
+        const { id } = req.params;
+
+        // update the document's status to 1 (active)
+        const result = await Sticker.findByIdAndUpdate(
+            id,
+            { status: STATUS_CODE.ACTIVE }, // Set status to 1 for active
+            { new: true } // Return the updated document
+        );
+
+        // document not found. return not found response error
+        if (!result) {
+            return res.status(STATUS_CODE.NOT_FOUND).send("Document not found");
+        }
+
+        res.send(result);
+    } catch (error) {
+        console.error(error);
+        res.status(STATUS_CODE.BAD_REQUEST).json(error);
+    }
+}
+
+/**
+ * Set a document's status to inactive (0)
+ * 
+ * @param {*} req 
+ * @param {*} res
+ * @returns {json} document data
+ */
+export const setInactive = async (req, res) => {
+    try {
+        // get id from request
+        const { id } = req.params;
+
+        // update the document's status to 0 (inactive)
+        const result = await Sticker.findByIdAndUpdate(
+            id,
+            { status: STATUS_CODE.INACTIVE }, // Set status to 0 for inactive
+            { new: true } // Return the updated document
+        );
+
+        // document not found. return not found response error
+        if (!result) {
+            return res.status(STATUS_CODE.NOT_FOUND).send("Document not found");
+        }
+
+        res.send(result);
+    } catch (error) {
+        console.error(error);
+        res.status(STATUS_CODE.BAD_REQUEST).json(error);
+    }
+}

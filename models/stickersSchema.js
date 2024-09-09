@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-// set status [0:active, 1:inactive , 2:deleted]
+// set status [1:active, 0:inactive , 5:deleted]
 const stickersSchema = new Schema(
     {
      
@@ -8,7 +8,7 @@ const stickersSchema = new Schema(
         },
         status: {
             type: String,
-            default: 0,            
+            default: 1,            
         },
     },
     { timestamps: true }
