@@ -22,7 +22,6 @@ const connectDB = async () => {
 
 export default connectDB;
 
-
 // all below is the oldest , depends on .env file 
 
 // import mongoose from "mongoose";
