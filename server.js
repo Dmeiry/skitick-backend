@@ -23,7 +23,7 @@ app.use(requestLogger);
 
 //! root request ** only used for testing ** // to be deleted 
 app.get("/", (req, res) => {
-  res.send("hello");
+  res.send("hello , THIS IS NEW SKITICK");
 });
 
 // routes
