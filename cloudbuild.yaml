@@ -1,0 +1,28 @@
+steps:
+# Step 1: Build the Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/skitick/skitick-github-repo/skitick-image:latest', '.']
+
+# Step 2: Push the Docker image to Google Artifact Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/skitick/skitick-github-repo/skitick-image:latest']
+
+# Step 3: Deploy the Docker image to Google Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args:
+    - 'run'
+    - 'deploy'
+    - 'skitick'  # Replace with your Cloud Run service name
+    - '--image'
+    - 'us-central1-docker.pkg.dev/skitick/skitick-github-repo/skitick-image:latest'
+    - '--platform'
+    - 'managed'
+    - '--region'
+    - 'us-central1'  # Replace with your desired region
+    - '--allow-unauthenticated'  # Optional: Allows unauthenticated access; remove if not needed
+images:
+- 'us-central1-docker.pkg.dev/skitick/skitick-github-repo/skitick-image:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY  # Logs will be sent to Cloud Logging only
