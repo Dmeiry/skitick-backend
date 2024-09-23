@@ -5,6 +5,10 @@ const stickersSchema = new Schema(
      
         imagePath: {
             type: String,
+            
+        },
+        name: {
+            type: String,
         },
         status: {
             type: String,
