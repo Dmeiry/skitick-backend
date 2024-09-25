@@ -1,5 +1,5 @@
 import Board from "../models/boardSchema.js";
-import STATUS_CODE from "../constants/statusCodes.js";
+import STATUS_CODE, { RECORD_STATUS } from "../constants/statusCodes.js";
 
 /**
  * 
@@ -110,7 +110,7 @@ export const deleteById = async (req, res) => {
       // update the document's status to 2 (delete)
       const result = await Board.findByIdAndUpdate(
         id,
-        { status: STATUS_CODE.DELETED }, // Set status to 2 for soft delete
+        { status: RECORD_STATUS.DELETED }, // Set status to 2 for soft delete
         { new: true } // Return the updated document
       );
 
@@ -141,9 +141,9 @@ export const undeleteById = async (req, res) => {
         const { id } = req.params;
 
         const result = await Board.findByIdAndUpdate(
-            id,
-            { status: STATUS_CODE.ACTIVE }, 
-            { new: true } // Return the updated document
+          id,
+          { status: RECORD_STATUS.ACTIVE },
+          { new: true } // Return the updated document
         );
 
         // document not found. return not found response error
@@ -174,9 +174,9 @@ export const setActive = async (req, res) => {
 
         // update the document's status to 1 (active)
         const result = await Board.findByIdAndUpdate(
-            id,
-            { status: STATUS_CODE.ACTIVE }, // Set status to 1 for active
-            { new: true } // Return the updated document
+          id,
+          { status: RECORD_STATUS.ACTIVE }, // Set status to 1 for active
+          { new: true } // Return the updated document
         );
 
         // document not found. return not found response error
@@ -205,9 +205,9 @@ export const setInactive = async (req, res) => {
 
         // update the document's status to 0 (inactive)
         const result = await Board.findByIdAndUpdate(
-            id,
-            { status: STATUS_CODE.INACTIVE }, // Set status to 0 for inactive
-            { new: true } // Return the updated document
+          id,
+          { status: RECORD_STATUS.INACTIVE }, // Set status to 0 for inactive
+          { new: true } // Return the updated document
         );
 
         // document not found. return not found response error

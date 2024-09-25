@@ -8,8 +8,12 @@ const otpSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: true,
+      // required: true,
     },
+    phone: {
+      type: String,
+      required: true, // Make phone required if needed
+    }, 
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",

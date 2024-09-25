@@ -8,7 +8,7 @@ import {
   trueFalseQuestionSchema,
   arrangeWordsQuestionSchema,
 } from "./questionSchema.js";
-import STATUS_CODES from "../constants/statusCodes.js";
+import  { RECORD_STATUS } from "../constants/statusCodes.js";
 
 export const boardSchema = new Schema(
   {
@@ -43,8 +43,12 @@ export const boardSchema = new Schema(
     status: {
       type: Number,
       required: true,
-      enum: [STATUS_CODES.ACTIVE, STATUS_CODES.INACTIVE, STATUS_CODES.DELETED], // 0: active, 1: unactive, 2: delete
-      default: STATUS_CODES.ACTIVE, // Default status can be set if needed
+      enum: [
+        RECORD_STATUS.ACTIVE,
+        RECORD_STATUS.INACTIVE,
+        RECORD_STATUS.DELETED,
+      ], // 0: active, 1: unactive, 2: delete
+      default: RECORD_STATUS.ACTIVE, // Default status can be set if needed
     },
     backgroundImageUrl: {
       type: String,

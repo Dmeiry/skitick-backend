@@ -1,53 +1,70 @@
-import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 import Otp from "../models/otpSchema.js";
 import User from "../models/userSchema.js"; // Import the User model
-import { sendOtpEmail } from "../util/sendemail.js"; // Assuming sendOtpEmail is in the util/sendemail.js file
+import { sendOtpSms } from "../util/otp.js";
 
 const generateOtp = () => {
   return Math.floor(100000 + Math.random() * 900000); // Generates a 6-digit OTP
 };
 
 export const registerUser = async (req, res) => {
-  const { email } = req.body; // Only email is used now
-  // Generate OTP
-  const otp = generateOtp();
+  const { phoneNumber } = req.body;
+  const otp = generateOtp(); // Assuming you have a generateOtp function
 
   try {
-    // Create a dummy user
-    const newUser = new User({
-      email,
-      auth: false, // Default authentication status
-      // Include other necessary fields if required
-    });
-    const savedUser = await newUser.save();
+    // Check if the user already exists
+    let user = await User.findOne({ phone: phoneNumber });
 
-    // Save OTP to the database with the user's ID
-    const newOtp = new Otp({
-      otpnumber: otp.toString(),
-      email: email, // Using email as the identifier
-      user_id: savedUser._id, // Add user ID reference
-      status: "pending",
-    });
-    await newOtp.save();
+    if (!user) {
+      // Create a new user if it doesn't exist
+      user = new User({
+        phone: phoneNumber,
+        auth: false,
+      });
+      await user.save();
+    }
 
-    // Send OTP via email
-    await sendOtpEmail(email, otp); // Sending OTP via email
-    res.status(200).json({ message: "OTP sent successfully via email" });
+    // Check if an OTP exists for the user
+    let existingOtp = await Otp.findOne({ phone: phoneNumber });
+
+    if (existingOtp) {
+      // Update the existing OTP with the new OTP value
+      existingOtp.otpnumber = otp.toString();
+      existingOtp.status = "pending";
+      existingOtp.updatedAt = new Date(); // Update the timestamp (assuming you have a timestamp field)
+      await existingOtp.save();
+    } else {
+      // Create a new OTP if it doesn't exist
+      const newOtp = new Otp({
+        otpnumber: otp.toString(),
+        phone: phoneNumber,
+        user_id: user._id,
+        status: "pending",
+      });
+      await newOtp.save();
+    }
+
+    // Send the OTP via SMS
+    await sendOtpSms(phoneNumber, otp);
+
+    res.status(200).json({ message: "OTP sent successfully via SMS" });
   } catch (error) {
-    console.error("Error in OTP process:", error); // Log error for debugging
+    console.error("Error in OTP process:", error);
     res.status(500).json({
-      error: "Failed to send OTP or save OTP to database",
-      details: error.message, // Include detailed error message
+      error: "Failed to send OTP or save OTP to the database.",
+      details: error.message,
     });
   }
 };
 
+
+
 export const verifyOtp = async (req, res) => {
-  const { email, otp } = req.body; // Only email and otp are used
+  const { phoneNumber, otp } = req.body;
 
   try {
-    // Retrieve the latest OTP entry for the given email
-    const otpRecord = await Otp.findOne({ email: email }).sort({
+    // Retrieve the latest OTP entry for the given phone number
+    const otpRecord = await Otp.findOne({ phone: phoneNumber }).sort({
       createdAt: -1,
     });
 
@@ -56,7 +73,15 @@ export const verifyOtp = async (req, res) => {
     }
 
     // Check if the OTP matches and is not expired
-    if (otpRecord.otpnumber === otp && otpRecord.status === "pending") {
+    const now = new Date();
+    const otpCreatedAt = new Date(otpRecord.updatedAt);
+    const expirationPeriod = 60 * 60 * 1000; // Example: 10 minutes expiration time
+    const isExpired = now - otpCreatedAt > expirationPeriod;
+    if (
+      otpRecord.otpnumber === otp &&
+      otpRecord.status === "pending" &&
+      !isExpired
+    ) {
       // Update OTP status to verified
       otpRecord.status = "verified";
       await otpRecord.save();
@@ -72,14 +97,27 @@ export const verifyOtp = async (req, res) => {
       user.auth = true; // Set auth to true
       await user.save();
 
-      res
-        .status(200)
-        .json({ message: "OTP verified successfully and user authenticated" });
+      // Generate JWT token
+      const token = jwt.sign(
+        {
+          userId: user._id, // Use relevant user data for the token
+          phoneNumber: user.phoneNumber, // You can include other data if necessary
+        },
+        process.env.JWT_SECRET
+      );
+
+      // Send token and user data in response
+      res.status(200).json({
+        message: "OTP verified successfully and user authenticated",
+        token, // Send the token
+        user,
+      });
     } else {
-      res.status(400).json({ error: "Invalid OTP or OTP has expired" });
+      const errorMessage = isExpired ? "OTP has expired" : "Invalid OTP";
+      res.status(400).json({ error: errorMessage });
     }
   } catch (error) {
-    console.error("Error in OTP verification:", error); // Log error for debugging
+    console.error("Error in OTP verification:", error);
     res
       .status(500)
       .json({ error: "Failed to verify OTP", details: error.message });
