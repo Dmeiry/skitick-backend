@@ -18,5 +18,4 @@ export const RECORD_STATUS = {
   DELETED: 5, // 5 for deleted
 };
 
-
 export default STATUS_CODES;
