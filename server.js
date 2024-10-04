@@ -13,7 +13,7 @@ import userQuestionRoute from "./routes/userQuestionRoute.js";
 import authRoutes from './routes/authRoutes.js'; 
 
 // constants
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 // initialising app instance
 const app = express();
 
